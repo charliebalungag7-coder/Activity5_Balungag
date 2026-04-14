@@ -1,0 +1,107 @@
+ <!DOCTYPE html>
+<html>
+<head>
+    <title>User Data Retrieval</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            text-align: center;
+            margin-top: 100px;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            width: 300px;
+            margin: auto;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        input {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #007BFF;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #output {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #e9f7ef;
+            color: #2c662d;
+        }
+
+        .error {
+            background-color: #fdecea;
+            color: #b71c1c;
+        }
+    </style>
+
+</head>
+<body>
+
+<div class="container">
+    <h2>User Information</h2>
+
+    <input type="number" id="userId" placeholder="Enter User ID">
+    <br>
+    <button onclick="getUser()">Get Info</button>
+
+    <div id="output"></div>
+</div>
+
+<script>
+function getUser() {
+    let id = document.getElementById("userId").value;
+    let output = document.getElementById("output");
+
+    if (id === "") {
+        output.innerHTML = "Please enter a User ID.";
+        output.className = "error";
+        return;
+    }
+
+    fetch("process.php?id=" + id)
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            output.innerHTML = data.error;
+            output.className = "error";
+        } else {
+            output.className = "";
+            output.innerHTML =
+                "<strong>Name:</strong> " + data.name + "<br>" +
+                "<strong>Email:</strong> " + data.email;
+        }
+    })
+    .catch(error => {
+        output.innerHTML = "Error fetching data.";
+        output.className = "error";
+    });
+}
+</script>
+
+</body>
+</html>
